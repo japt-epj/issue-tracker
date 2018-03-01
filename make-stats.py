@@ -22,7 +22,8 @@ def get_time(scope, body):
     pattern = '{}:(.*)'.format(scope)
     matcher = re.compile(pattern)
     time = matcher.search(body)
-    return '' if time is None else time.group(1).strip()
+    return ('' if time is None
+            else time.group(1).strip())
 
 
 def get_stats(issue):
@@ -46,7 +47,10 @@ def get_issues_response(page):
 
 
 def get_all_issues():
-    last_url = next((strip_page(link) for link in get_links() if link['rel'] == 'last'))
+    last_url = next((strip_page(link)
+                     for link in get_links()
+                     if link['rel'] == 'last'))
+
     last = int(last_url['url'])
     return [get_issues_response(i) for i in range(1, last + 1)]
 
@@ -65,7 +69,9 @@ def issues_to_stats(issues):
 def get_links():
     request = urllib.request.Request(url.format(1), headers=header)
     with urllib.request.urlopen(request) as response:
-        return requests.utils.parse_header_links(response.info()['Link']) if response.info()['Link'] else empty_list
+        return (requests.utils.parse_header_links(response.info()['Link'])
+                if response.info()['Link']
+                else empty_list)
 
 
 def strip_page(link):
