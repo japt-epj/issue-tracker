@@ -21,7 +21,7 @@ def read_token():
 def get_time(scope, body):
     pattern = '{}:(.*)'.format(scope)
     matcher = re.compile(pattern)
-    time = matcher.match(body)
+    time = matcher.search(body)
     return '' if time is None else time.group(1).strip()
 
 
